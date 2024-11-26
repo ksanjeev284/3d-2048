@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 2048 Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        #game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .overlay {
+            position: fixed;
+            z-index: 2;
+            font-family: Arial, sans-serif;
+        }
+
+        #stats {
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        #controls {
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .button {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        #instructions {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 2;
+            pointer-events: none;
+            font-size: 20px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+        }
+
+        #game-over {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 3;
+            backdrop-filter: blur(10px);
+        }
+
+        #game-over h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 36px;
+        }
+
+        #final-score {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 2;
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <div id="stats" class="overlay">
+        <div id="score" class="stat-box">Score: 0</div>
+        <div id="high-score" class="stat-box">High Score: 0</div>
+        <div id="move-count" class="stat-box">Moves: 0</div>
+        <div id="time-played" class="stat-box">Time: 0:00</div>
+    </div>
+
+    <div id="controls" class="overlay">
+        <button id="new-game" class="button">New Game</button>
+        <button id="reset" class="button">Reset</button>
+        <button id="undo" class="button">Undo</button>
+    </div>
+
+    <div id="instructions">
+        Use arrow keys or swipe to move tiles<br>
+        Combine matching numbers to reach 2048!
+    </div>
+
+    <div class="keyboard-shortcuts">
+        ⌨️ U: Undo | M: Toggle Sound
+    </div>
+
+    <div id="game-over">
+        <h2>Game Over!</h2>
+        <div id="final-score">Score: 0</div>
+        <button id="restart" class="button">Play Again</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="sounds.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
